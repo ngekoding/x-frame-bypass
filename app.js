@@ -1,6 +1,5 @@
 const express = require('express');
 const axios = require('axios');
-const https = require('https');
 const mime = require('mime');
 const morgan = require('morgan');
 const { URL } = require('url');
@@ -28,10 +27,7 @@ app.get('/', (req, res) => {
 
     axios({
       url, 
-      method: "GET",  
-      httpsAgent: new https.Agent({
-        rejectUnauthorized: false
-      }),
+      method: "GET",
       responseType: 'arraybuffer'
     }).then(({ data }) => {
         const urlMime = getMimeType(url); // get mime type of the requested url
