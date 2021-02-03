@@ -19,7 +19,7 @@ const getMimeType = url => {
 };
 
 app.get('/', (req, res) => {
-    const { url } = req.query; // get url parameter
+    const { url, prefix } = req.query; // get url parameter
     if(!url) {
       res.type('text/html');
       return res.end("You need to specify <code>url</code> query parameter");
@@ -33,16 +33,20 @@ app.get('/', (req, res) => {
         const urlMime = getMimeType(url); // get mime type of the requested url
         if(urlMime === 'text/html') { // replace links only in html
             data = data.toString().replace(regex, (match, p1, p2)=>{
-                let newUrl = '';
-                if(p2.indexOf('http') !== -1) {
-                    newUrl = p2;
-                } else if (p2.substr(0,2) === '//') {
-                    newUrl = 'http:' + p2;
-                } else {
-                    const searchURL = new URL(url);
-                    newUrl = searchURL.protocol + '//' + searchURL.host + p2;
-                }
-                return ` ${p1}="https://${req.hostname}:${port}?url=${newUrl}"`;
+              if (prefix && !p2.startsWith(prefix)) {
+                return match;
+              }
+
+              let newUrl = '';
+              if(p2.indexOf('http') !== -1) {
+                  newUrl = p2;
+              } else if (p2.substr(0,2) === '//') {
+                  newUrl = 'http:' + p2;
+              } else {
+                  const searchURL = new URL(url);
+                  newUrl = searchURL.protocol + '//' + searchURL.host + p2;
+              }
+              return ` ${p1}="https://${req.hostname}:${port}?url=${newUrl}"`;
             });
         }
         res.type(urlMime);
