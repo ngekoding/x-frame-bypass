@@ -46,7 +46,7 @@ app.get('/', (req, res) => {
                   const searchURL = new URL(url);
                   newUrl = searchURL.protocol + '//' + searchURL.host + p2;
               }
-              return ` ${p1}="https://${req.hostname}:${port}?url=${newUrl}"`;
+              return ` ${p1}="https://${req.hostname}?url=${newUrl}"`;
             });
         }
         res.type(urlMime);
