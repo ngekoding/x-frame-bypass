@@ -3,10 +3,12 @@ const axios = require('axios');
 const mime = require('mime');
 const morgan = require('morgan');
 const { URL } = require('url');
+const cors = require('cors');
 
 const app = express();
 const port = process.env.PORT || 3004;
 
+app.use(cors());
 app.use(morgan('tiny'));
 
 const regex = /\s+(href|src)=['"](.*?)['"]/g;
